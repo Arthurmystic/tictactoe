@@ -1,0 +1,19 @@
+html{
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after{
+    box-sizing: inherit;
+}
+
+#game-container{
+    display: grid;
+    grid-template: repeat(3, 50px)/repeat(3, 50px);
+}
+
+div>div {
+    border: 1px solid blue;
+    text-align: center;
+}

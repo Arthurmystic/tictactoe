@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name = "viewport" content ="width=device-width", initial-scale="1.0">
+    <meta name="viewport" content="width=device-width" , initial-scale="1.0">
     <title> TicTacToeGame</title>
     <link rel="stylesheet" href="style.css">
 
@@ -12,7 +12,86 @@
 <body>
     <h1> Tic Tac Toe Game</h1>
     <div id="game"></div>
-    <script src=scritpt.css> </script>
+
+    <div id="game-container">
+        <div class = "cell" data-val="1">1</div>
+        <div class = "cell" data-val="2">2</div>
+        <div class = "cell" data-val="3">3</div>
+        <div class = "cell" data-val="4">4</div>
+        <div class = "cell" data-val="5">5</div>
+        <div class = "cell" data-val="6">6</div>
+        <div class = "cell" data-val="7">7</div>
+        <div class = "cell" data-val="8">8</div>
+        <div class = "cell" data-val="9">9</div>
+    </div>
+    
+
+    <!-- <script src=scritpt.css> </script> -->
+    <script>
+
+        docQuery = (function(){
+            const cellVal = document.querySelector("#game-container");
+            return {cellVal}
+        }());
+
+        function gameSetup () {
+            // This function will set up the game by asking for player names
+            
+            const player1 = {
+                name: prompt('Enter player 1 name'),
+                marker: 'P',
+                entries: [],
+            };
+            const player2 = {
+                name: prompt('Enter player 1 name'),
+                marker: 'K',
+                entries: [],
+            }
+            let gameRound = 0
+            return { player1, player2, gameRound}
+        };
+
+        const game = (function(){
+            const { player1, player2} = gameSetup();
+            // console.log(player1)
+            player1.entries.push(1,2,3);
+            return { player1, player2 };
+        }());
+        
+        function getInput(e){
+            let dataVal = e.target.dataset.val;
+            console.log(dataVal);
+            console.log(game.player1)
+
+            // game.player1.entries.push(1,2);
+            // console.log(game.player1.entries);
+
+            return function selectedVal(){
+                return dataVal
+            }
+            // let selectedVal = () => dataVal;
+            // return {selectedVal};
+
+        }
+
+        toWin = (function (){
+            const winningValues = () =>{
+                return [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9][3,5,7]];
+            }
+            return { winningValues };
+        }()); 
+
+        function gameLogic(){
+            let turns = 1;
+            const selectedV = getInput(e);
+            console.log(selectedV)
+        }
+
+        docQuery.cellVal.addEventListener('click',getInput)
+
+
+
+    </script>
 </body>
 
 </html>
