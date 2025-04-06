@@ -14,82 +14,92 @@
     <div id="game"></div>
 
     <div id="game-container">
-        <div class = "cell" data-val="1">1</div>
-        <div class = "cell" data-val="2">2</div>
-        <div class = "cell" data-val="3">3</div>
-        <div class = "cell" data-val="4">4</div>
-        <div class = "cell" data-val="5">5</div>
-        <div class = "cell" data-val="6">6</div>
-        <div class = "cell" data-val="7">7</div>
-        <div class = "cell" data-val="8">8</div>
-        <div class = "cell" data-val="9">9</div>
+        <div class="cell" data-val="1">1</div>
+        <div class="cell" data-val="2">2</div>
+        <div class="cell" data-val="3">3</div>
+        <div class="cell" data-val="4">4</div>
+        <div class="cell" data-val="5">5</div>
+        <div class="cell" data-val="6">6</div>
+        <div class="cell" data-val="7">7</div>
+        <div class="cell" data-val="8">8</div>
+        <div class="cell" data-val="9">9</div>
     </div>
-    
+
 
     <!-- <script src=scritpt.css> </script> -->
     <script>
 
-        docQuery = (function(){
+        const docQuery = (function () {
             const cellVal = document.querySelector("#game-container");
-            return {cellVal}
+            return { cellVal }
         }());
 
-        function gameSetup () {
+        const gameSetup = (function () {
             // This function will set up the game by asking for player names
-            
+
             const player1 = {
                 name: prompt('Enter player 1 name'),
-                marker: 'P',
+                marker: 'X',
                 entries: [],
             };
+
             const player2 = {
                 name: prompt('Enter player 1 name'),
-                marker: 'K',
+                marker: 'O',
                 entries: [],
             }
-            let gameRound = 0
-            return { player1, player2, gameRound}
+
+            // let turn = 1
+
+            // const gameRound =()=> turn;
+
+            let gameRound = 1
+            return { player1, player2, gameRound }
+        }());
+
+        function getInput(e) {
+            let dataVal = e.target.dataset.val;
+            // const dataVal = () => userInput;
+            // return {userInput}; this exposes userInput
+            return { dataVal }; // this maintains it as a private var.
+        }
+
+        function winningValues() {
+            return [
+                [1, 2, 3], [4, 5, 6], [7, 8, 9],
+                [1, 4, 7], [2, 5, 8], [3, 6, 9],
+                [1, 5, 9], [3, 5, 7]
+            ];
         };
 
-        const game = (function(){
-            const { player1, player2} = gameSetup();
-            // console.log(player1)
-            player1.entries.push(1,2,3);
-            return { player1, player2 };
-        }());
-        
-        function getInput(e){
-            let dataVal = e.target.dataset.val;
-            console.log(dataVal);
-            console.log(game.player1)
+        docQuery.cellVal.addEventListener('click', gameFlow)
 
-            // game.player1.entries.push(1,2);
-            // console.log(game.player1.entries);
-
-            return function selectedVal(){
-                return dataVal
+        function gameFlow(e) {
+            const { dataVal } = getInput(e);
+            
+            console.log(dataVal)
+            if (gameSetup.gameRound % 2 == 1) {
+                gameSetup.player1.entries.push(dataVal)
+                winChecker(gameSetup.player1.name, gameSetup.player1.entries)
+            } else {
+                gameSetup.player2.entries.push(dataVal)
+                winChecker(gameSetup.player2.name, gameSetup.player2.entries)
             }
-            // let selectedVal = () => dataVal;
-            // return {selectedVal};
-
+            gameSetup.gameRound++;
         }
 
-        toWin = (function (){
-            const winningValues = () =>{
-                return [[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9][3,5,7]];
+        function winChecker(player, mat) {
+            mat = mat.map(Number); // values in mat are strings. this converts them to numbers
+            player = player.toUpperCase();
+            if (mat.length > 2) {;
+                for (let subArray of winningValues()) {
+                    if (subArray.every(num => mat.includes(num))) {
+                        console.log(` -- ${player} WINS -- `);
+                        docQuery.cellVal.removeEventListener('click', gameFlow);
+                    }
+                }
             }
-            return { winningValues };
-        }()); 
-
-        function gameLogic(){
-            let turns = 1;
-            const selectedV = getInput(e);
-            console.log(selectedV)
         }
-
-        docQuery.cellVal.addEventListener('click',getInput)
-
-
 
     </script>
 </body>
