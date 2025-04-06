@@ -34,27 +34,23 @@
             return { gameContainer }
         }());
 
+        function createPlayer(name, marker){
+            return { name, 
+                marker, 
+                moves:[] };
+        }  
+        
         const players = (function () {
-            // This function will set up the game by asking for player names
-
-            const playerOne = {
-                name: prompt('Enter player 1 name'),
-                marker: 'X',
-                moves: [],
-            };
-
-            const playerTwo = {
-                name: prompt('Enter player 1 name'),
-                marker: 'O',
-                moves: [],
-            }
-
-            // let turn = 1
-
-            // const currentRound =()=> turn;
+            
+            const playerOne = createPlayer(prompt('Enter player 1 name'), 'X');
+            const playerTwo = createPlayer(prompt('Enter player 2 name'), 'O');
 
             let currentRound = 1
-            return { playerOne, playerTwo, currentRound }
+            const getCurrentRound =()=> currentRound;
+            const incrementRound = () => currentRound++;
+
+            return { playerOne, playerTwo, getCurrentRound, incrementRound }
+
         }());
 
         function getClickedCellData(e) {
@@ -78,7 +74,7 @@
             const { cellValue } = getClickedCellData(e);
             
             console.log(cellValue)
-            if (players.currentRound % 2 == 1) {
+            if (players.getCurrentRound() % 2 == 1) {
                 players.playerOne.moves.push(cellValue)
                 checkWinner(players.playerOne.name, players.playerOne.moves)
             } else {
@@ -86,7 +82,7 @@
                 checkWinner(players.playerTwo.name, players.playerTwo.moves)
             }
 
-            players.currentRound++;
+            players.incrementRound();
         }
 
         function checkWinner(playerName, playerMoves) {
@@ -103,7 +99,7 @@
                     }
                 }
             }
-            if (!winnerIsFound && players.currentRound === 9){
+            if (!winnerIsFound && players.getCurrentRound() === 9){
                         console.log(` -- It's a DRAW -- `);
                         docQuery.gameContainer.removeEventListener('click', gameFlow);
                     }
