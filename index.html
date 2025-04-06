@@ -30,41 +30,41 @@
     <script>
 
         const docQuery = (function () {
-            const cellVal = document.querySelector("#game-container");
-            return { cellVal }
+            const gameContainer = document.querySelector("#game-container");
+            return { gameContainer }
         }());
 
-        const gameSetup = (function () {
+        const players = (function () {
             // This function will set up the game by asking for player names
 
-            const player1 = {
+            const playerOne = {
                 name: prompt('Enter player 1 name'),
                 marker: 'X',
-                entries: [],
+                moves: [],
             };
 
-            const player2 = {
+            const playerTwo = {
                 name: prompt('Enter player 1 name'),
                 marker: 'O',
-                entries: [],
+                moves: [],
             }
 
             // let turn = 1
 
-            // const gameRound =()=> turn;
+            // const currentRound =()=> turn;
 
-            let gameRound = 1
-            return { player1, player2, gameRound }
+            let currentRound = 1
+            return { playerOne, playerTwo, currentRound }
         }());
 
-        function getInput(e) {
-            let dataVal = e.target.dataset.val;
-            // const dataVal = () => userInput;
+        function getClickedCellData(e) {
+            let cellValue = e.target.dataset.val;
+            // const cellValue = () => userInput;
             // return {userInput}; this exposes userInput
-            return { dataVal }; // this maintains it as a private var.
+            return { cellValue }; // this maintains it as a private var.
         }
 
-        function winningValues() {
+        function getWinningCombinations() {
             return [
                 [1, 2, 3], [4, 5, 6], [7, 8, 9],
                 [1, 4, 7], [2, 5, 8], [3, 6, 9],
@@ -72,33 +72,41 @@
             ];
         };
 
-        docQuery.cellVal.addEventListener('click', gameFlow)
+        docQuery.gameContainer.addEventListener('click', gameFlow)
 
         function gameFlow(e) {
-            const { dataVal } = getInput(e);
+            const { cellValue } = getClickedCellData(e);
             
-            console.log(dataVal)
-            if (gameSetup.gameRound % 2 == 1) {
-                gameSetup.player1.entries.push(dataVal)
-                winChecker(gameSetup.player1.name, gameSetup.player1.entries)
+            console.log(cellValue)
+            if (players.currentRound % 2 == 1) {
+                players.playerOne.moves.push(cellValue)
+                checkWinner(players.playerOne.name, players.playerOne.moves)
             } else {
-                gameSetup.player2.entries.push(dataVal)
-                winChecker(gameSetup.player2.name, gameSetup.player2.entries)
+                players.playerTwo.moves.push(cellValue)
+                checkWinner(players.playerTwo.name, players.playerTwo.moves)
             }
-            gameSetup.gameRound++;
+
+            players.currentRound++;
         }
 
-        function winChecker(player, mat) {
-            mat = mat.map(Number); // values in mat are strings. this converts them to numbers
-            player = player.toUpperCase();
-            if (mat.length > 2) {;
-                for (let subArray of winningValues()) {
-                    if (subArray.every(num => mat.includes(num))) {
-                        console.log(` -- ${player} WINS -- `);
-                        docQuery.cellVal.removeEventListener('click', gameFlow);
+        function checkWinner(playerName, playerMoves) {
+            const moves = playerMoves.map(Number); // values in playerMoves are strings. this converts them to numbers
+            const name = playerName.toUpperCase();
+            let winnerIsFound = false;
+            if (moves.length > 2) {
+                for (const subArray of getWinningCombinations()) {
+                    if (subArray.every(num => moves.includes(num))) {
+                        console.log(` -- ${name} WINS -- `);
+                        winnerIsFound = true;
+                        docQuery.gameContainer.removeEventListener('click', gameFlow);
+                        break; // exit loop
                     }
                 }
             }
+            if (!winnerIsFound && players.currentRound === 9){
+                        console.log(` -- It's a DRAW -- `);
+                        docQuery.gameContainer.removeEventListener('click', gameFlow);
+                    }
         }
 
     </script>
