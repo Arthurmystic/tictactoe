@@ -13,6 +13,11 @@ html{
     grid-template: repeat(3, 50px)/repeat(3, 50px);
 }
 
+.cell{
+    align-content: center;
+    justify-content: center;
+}
+
 div>div {
     border: 1px solid blue;
     text-align: center;
