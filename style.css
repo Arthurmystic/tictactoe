@@ -16,9 +16,11 @@ html{
 .cell{
     align-content: center;
     justify-content: center;
+    text-align: center;
+    border: 1px solid blue;
 }
 
-div>div {
+/* div>div {
     border: 1px solid blue;
     text-align: center;
-}
+} */
