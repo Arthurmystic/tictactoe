@@ -12,7 +12,6 @@
 <body>
     <h1> Tic Tac Toe Game</h1>
     <div id="game">
-
         <div id="game-container">
             <div class="cell" data-val="1"> </div>
             <div class="cell" data-val="2"> </div>
@@ -24,19 +23,15 @@
             <div class="cell" data-val="8"> </div>
             <div class="cell" data-val="9"> </div>
         </div>
+
         <dialog dialogBox>
             <fieldset>
                 <legend> GAME OVER </legend>
                 <div id="results"> </div>
-
             </fieldset>
             <button type="button" id="closeButton"> Close</button>
-
-
         </dialog>
-
     </div>
-
 
     <!-- <script src=scritpt.css> </script> -->
     <script>
@@ -75,10 +70,10 @@
         }());
 
         function getClickedCellData(e) {
-            let cellValue = e.target.dataset.val;
-            // const cellValue = () => userInput;
+            let clickedCell = e.target.dataset.val;
+            // const clickedCell = () => userInput;
             // return {userInput}; this exposes userInput
-            return { cellValue }; // Return the selected cell as private data
+            return { clickedCell }; // Return the selected cell as private data
         }
 
         function markCell(marker, cellIndex) {
@@ -87,23 +82,20 @@
         }
 
         function gameFlow(e) {
-            const { cellValue } = getClickedCellData(e);
-
-            if (gameController.playedCells.includes(cellValue)) {
+            const { clickedCell } = getClickedCellData(e);
+            if (gameController.playedCells.includes(clickedCell)) {
                 alert('Cell already marked! Pick an empty one.');
                 return; // this stops further execution of the remaining code in the function.
             }
 
-            gameController.playedCells.push(cellValue);
-            // console.log(cellValue, typeof (cellValue));
+            gameController.playedCells.push(clickedCell);
 
             const player = (gameController.getCurrentRound() % 2 == 1) ?
                 gameController.playerOne :
                 gameController.playerTwo;
 
-
-            player.moves.push(cellValue);
-            markCell(player.marker, cellValue);
+            player.moves.push(clickedCell);
+            markCell(player.marker, clickedCell);
             const { declarationText, isGameOver } = checkWinner(player.name, player.moves);
 
             if (isGameOver) declareWinner(declarationText);
@@ -121,7 +113,6 @@
         function declareWinner(winningText) {
             docQuery.resultsDiv.textContent = winningText;
             docQuery.dialogBox.show();
-
         }
 
         function checkWinner(playerName, playerMoves) {
