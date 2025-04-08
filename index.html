@@ -24,11 +24,13 @@
             <div class="cell" data-val="8"> </div>
             <div class="cell" data-val="9"> </div>
         </div>
-        <dialog modal>
+        <dialog dialogBox>
             <fieldset>
                 <legend> GAME OVER </legend>
                 <div id="results"> </div>
+
             </fieldset>
+            <button type="button" id="closeButton"> Close</button>
 
 
         </dialog>
@@ -41,8 +43,10 @@
         const docQuery = (function () {
             const gameContainer = document.querySelector("#game-container");
             const cellDiv = document.querySelectorAll(".cell");
+            const dialogBox = document.querySelector("[dialogBox]");
+            const closeDialog = document.querySelector("#closeButton");
             const resultsDiv = document.querySelector("#results");
-            return { gameContainer, cellDiv, resultsDiv };
+            return { gameContainer, cellDiv, resultsDiv, dialogBox, closeDialog };
         }());
 
         function createPlayer(name, marker) {
@@ -68,9 +72,7 @@
             const incrementRound = () => currentRound++;
 
             return { playerOne, playerTwo, getCurrentRound, incrementRound, playedCells }
-
         }());
-
 
         function getClickedCellData(e) {
             let cellValue = e.target.dataset.val;
@@ -79,7 +81,6 @@
             return { cellValue }; // Return the selected cell as private data
         }
 
-
         function markCell(marker, cellIndex) {
             const cellID = Number(cellIndex)
             docQuery.cellDiv[cellID - 1].textContent = marker
@@ -87,27 +88,26 @@
 
         function gameFlow(e) {
             const { cellValue } = getClickedCellData(e);
-            let player;
+
             if (gameController.playedCells.includes(cellValue)) {
                 alert('Cell already marked! Pick an empty one.');
-                // getClickedCellData(e);
-
-            } else {
-                gameController.playedCells.push(cellValue);
-                console.log(cellValue, typeof (cellValue));
-
-                if (gameController.getCurrentRound() % 2 == 1) {
-                    player = gameController.playerOne;
-                } else {
-                    player = gameController.playerTwo;
-                }
-
-                player.moves.push(cellValue);
-                markCell(player.marker, cellValue);
-                const results = checkWinner(player.name, player.moves);
-
-                gameController.incrementRound();
+                return; // this stops further execution of the remaining code in the function.
             }
+
+            gameController.playedCells.push(cellValue);
+            // console.log(cellValue, typeof (cellValue));
+
+            const player = (gameController.getCurrentRound() % 2 == 1) ?
+                gameController.playerOne :
+                gameController.playerTwo;
+
+
+            player.moves.push(cellValue);
+            markCell(player.marker, cellValue);
+            const { declarationText, isGameOver } = checkWinner(player.name, player.moves);
+
+            if (isGameOver) declareWinner(declarationText);
+            gameController.incrementRound();
         }
 
         function getWinningCombinations() {
@@ -116,32 +116,45 @@
                 [1, 4, 7], [2, 5, 8], [3, 6, 9],
                 [1, 5, 9], [3, 5, 7]
             ];
-        };
+        }
+
+        function declareWinner(winningText) {
+            docQuery.resultsDiv.textContent = winningText;
+            docQuery.dialogBox.show();
+
+        }
 
         function checkWinner(playerName, playerMoves) {
             const moves = playerMoves.map(Number); // values in playerMoves are strings. this converts them to numbers
             const name = playerName.toUpperCase();
-            let winnerIsFound = false;
+            let isGameOver = false;
+            let declarationText;
+
             if (moves.length > 2) {
                 for (const subArray of getWinningCombinations()) {
                     if (subArray.every(num => moves.includes(num))) {
                         console.log(` -- ${name} WINS -- `);
-                        winnerIsFound = true;
-                        docQuery.gameContainer.removeEventListener('click', gameFlow);
-                        return ` -- ${name} WINS -- `
-                        break; // exit loop
+                        isGameOver = true;
+                        declarationText = ` -- ${name} WINS -- `;
+                        break; // break out of the for-loop
                     }
                 }
             }
 
-            if (!winnerIsFound && gameController.getCurrentRound() === 9) {
+            if (!isGameOver && gameController.getCurrentRound() === 9) {
                 console.log(` -- It's a DRAW -- `);
-                return ` -- It's a DRAW -- `
-                docQuery.gameContainer.removeEventListener('click', gameFlow);
+                isGameOver = true;
+                declarationText = ` -- It's a DRAW -- `;
             }
+
+            if (isGameOver) docQuery.gameContainer.removeEventListener('click', gameFlow);
+            return { declarationText: declarationText || '', isGameOver }
         }
 
-        docQuery.gameContainer.addEventListener('click', gameFlow)
+        docQuery.gameContainer.addEventListener('click', gameFlow);
+        docQuery.closeDialog.addEventListener('click', () => {
+            docQuery.dialogBox.close()
+        });
 
     </script>
 </body>
