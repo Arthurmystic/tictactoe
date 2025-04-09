@@ -17,6 +17,17 @@ function createPlayer(name, marker) {
     };
 }
 
+// Could also have used:
+// function createPlayer(name, marker) {
+//     this.name = name;
+//     this.marker = marker;
+//     this.moves = [];
+//     this.playedCells = [];
+// }
+// and used it by: 
+// const playerOne = new createPlayer(prompt('Enter player 1 name')||'Player1', 'X');
+
+
 const gameController = (function () {
     const playerOne = createPlayer(prompt('Enter player 1 name')||'Player1', 'X');
     const playerTwo = createPlayer(prompt('Enter player 2 name')||'Player2', 'O');
