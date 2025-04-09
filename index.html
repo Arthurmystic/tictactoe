@@ -11,37 +11,45 @@
 
 <body>
     <h1> Tic Tac Toe Game</h1>
-    <div id="game">
-        <div id="game-container">
-            <div class="cell" data-val="1"> </div>
-            <div class="cell" data-val="2"> </div>
-            <div class="cell" data-val="3"> </div>
-            <div class="cell" data-val="4"> </div>
-            <div class="cell" data-val="5"> </div>
-            <div class="cell" data-val="6"> </div>
-            <div class="cell" data-val="7"> </div>
-            <div class="cell" data-val="8"> </div>
-            <div class="cell" data-val="9"> </div>
-        </div>
 
-        <dialog dialogBox>
-            <fieldset>
-                <legend> GAME OVER </legend>
-                <div id="results"> </div>
-            </fieldset>
-            <button type="button" id="closeButton"> Close</button>
-        </dialog>
+
+    <div id="game-container">
+        <div class="cell" data-val="1"> </div>
+        <div class="cell" data-val="2"> </div>
+        <div class="cell" data-val="3"> </div>
+        <div class="cell" data-val="4"> </div>
+        <div class="cell" data-val="5"> </div>
+        <div class="cell" data-val="6"> </div>
+        <div class="cell" data-val="7"> </div>
+        <div class="cell" data-val="8"> </div>
+        <div class="cell" data-val="9"> </div>
     </div>
+    
+    <p></p>
+    
+    <dialog dialogBox id="gameDialog">
+        <div class="dialog-content">
+          <h2>Game Over</h2>
+          <p id="results"></p>
+          <button type="button" id="closeButton">Close</button>
+        </div>
+      </dialog>
+    
+    <p></p>
+
+    <button id="restartButton" type="button">Restart Game</button>
 
     <!-- <script src=scritpt.css> </script> -->
     <script>
+
         const docQuery = (function () {
             const gameContainer = document.querySelector("#game-container");
             const cellDiv = document.querySelectorAll(".cell");
             const dialogBox = document.querySelector("[dialogBox]");
             const closeDialog = document.querySelector("#closeButton");
             const resultsDiv = document.querySelector("#results");
-            return { gameContainer, cellDiv, resultsDiv, dialogBox, closeDialog };
+            const restartButton = document.querySelector("#restartButton");
+            return { gameContainer, cellDiv, resultsDiv, dialogBox, closeDialog, restartButton };
         }());
 
         function createPlayer(name, marker) {
@@ -54,8 +62,8 @@
         }
 
         const gameController = (function () {
-            const playerOne = createPlayer(prompt('Enter player 1 name'), 'X');
-            const playerTwo = createPlayer(prompt('Enter player 2 name'), 'O');
+            const playerOne = createPlayer(prompt('Enter player 1 name')||'Player1', 'X');
+            const playerTwo = createPlayer(prompt('Enter player 2 name')||'Player2', 'O');
             const { playedCells } = createPlayer(); // this is for learning 
             // — I don’t actually need `playedCells` to be part of `createPlayer`.
             // I could have simply declared `let playedCells = []` here in gameController
@@ -142,9 +150,14 @@
             return { declarationText: declarationText || '', isGameOver }
         }
 
-        docQuery.gameContainer.addEventListener('click', gameFlow);
-        docQuery.closeDialog.addEventListener('click', () => {
+        docQuery.gameContainer.addEventListener("click", gameFlow);
+        
+        docQuery.closeDialog.addEventListener("click", () => {
             docQuery.dialogBox.close()
+        });
+
+        docQuery.restartButton.addEventListener("click", function () {
+            location.reload(); //Reloads page 
         });
 
     </script>
