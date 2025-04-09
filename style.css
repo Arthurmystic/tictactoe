@@ -1,106 +1,102 @@
-html, body {
-    margin: 0;
-    padding: 0;
+/* Reset and box-sizing */
+html {
     box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f4f6f8;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: start;
-    height: 100vh;
-}
-
-h1 {
-    margin-top: 20px;
-    font-size: 2rem;
+    padding: 2rem;
+    background: #f2f6fc;
     color: #333;
 }
 
+h1 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+/* Game Board */
 #game-container {
     display: grid;
     grid-template-columns: repeat(3, 80px);
     grid-template-rows: repeat(3, 80px);
-    gap: 10px;
-    margin-top: 30px;
+    gap: 8px;
+    margin-bottom: 2rem;
 }
 
 .cell {
-    background-color: #fff;
-    border: 2px solid #0077cc;
+    background: #fff;
+    border: 2px solid #2980b9;
     font-size: 2rem;
-    color: #0077cc;
+    font-weight: bold;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background 0.2s ease;
 }
 
 .cell:hover {
-    background-color: #e6f2ff;
+    background: #ecf0f1;
 }
 
-#gameDialog::backdrop {
-    background: rgba(0, 0, 0, 0.4);
-}
-
-#gameDialog {
+/* Dialog */
+dialog[dialogBox] {
     border: none;
-    border-radius: 12px;
-    padding: 20px 30px;
-    width: 300px;
-    background-color: white;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    background: #fff;
+    max-width: 300px;
     text-align: center;
 }
 
 .dialog-content h2 {
-    margin: 0 0 10px;
-    color: #0077cc;
-    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #e74c3c;
 }
-
-.dialog-content p {
-    font-size: 1.1rem;
-    margin: 10px 0 20px;
-    color: #333;
-}
-
-.dialog-content button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #0077cc;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.dialog-content button:hover {
-    background-color: #005fa3;
-}
-
 
 #results {
     font-size: 1.2rem;
-    margin: 10px 0;
-    color: #333;
+    font-weight: 500;
+    margin-bottom: 1.2rem;
 }
 
-button {
-    padding: 10px 15px;
-    margin: 10px;
+#closeButton, #restartButton {
+    padding: 0.6rem 1.2rem;
     border: none;
-    border-radius: 5px;
-    background-color: #0077cc;
+    background: #3498db;
     color: white;
-    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background 0.3s ease;
 }
 
-button:hover {
-    background-color: #005fa3;
+#closeButton:hover,
+#restartButton:hover {
+    background: #2980b9;
 }
+
+/* Button at bottom */
+#restartButton {
+    margin-top: 1.5rem;
+}
+
+p span {
+    display: block;
+    margin-top: 2rem;
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+}
+
