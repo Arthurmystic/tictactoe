@@ -40,12 +40,12 @@ function getClickedCellData(e) {
     return { clickedCell }; // Return the selected cell as private data
 }
 
-function markCell(marker, cellIndex) {
+function markClickedCell(marker, cellIndex) {
     const cellID = Number(cellIndex)
     docQuery.cellDiv[cellID - 1].textContent = marker
 }
 
-function gameFlow(e) {
+function processCellClick(e) {
     const { clickedCell } = getClickedCellData(e);
     if (gameController.playedCells.includes(clickedCell)) {
         alert('Cell already marked! Pick an empty one.');
@@ -56,10 +56,10 @@ function gameFlow(e) {
 
     const player = (gameController.getCurrentRound() % 2 == 1) ?
         gameController.playerOne :
-        gameController.playerTwo;
+        gameController.playerTwo; // Determines the current player based on the round number
 
     player.moves.push(clickedCell);
-    markCell(player.marker, clickedCell);
+    markClickedCell(player.marker, clickedCell);
     const { declarationText, isGameOver } = checkWinner(player.name, player.moves);
 
     if (isGameOver) declareWinner(declarationText);
@@ -76,7 +76,7 @@ function getWinningCombinations() {
 
 function declareWinner(winningText) {
     docQuery.resultsDiv.textContent = winningText;
-    docQuery.dialogBox.show();
+    docQuery.dialogBox.show(); // Displays the 'Game Over' dialog
 }
 
 function checkWinner(playerName, playerMoves) {
@@ -102,14 +102,14 @@ function checkWinner(playerName, playerMoves) {
         declarationText = ` -- It's a DRAW -- `;
     }
 
-    if (isGameOver) docQuery.gameContainer.removeEventListener('click', gameFlow);
+    if (isGameOver) docQuery.gameContainer.removeEventListener('click', processCellClick);
     return { declarationText: declarationText || '', isGameOver }
 }
 
-docQuery.gameContainer.addEventListener("click", gameFlow);
+docQuery.gameContainer.addEventListener("click", processCellClick);  // Adds event listener to the game container to handle cell clicks
 
 docQuery.closeDialog.addEventListener("click", () => {
-    docQuery.dialogBox.close()
+    docQuery.dialogBox.close() // Closes the game over dialog
 });
 
 docQuery.restartButton.addEventListener("click", function () {
