@@ -68,9 +68,9 @@ function processCellClick(e) {
 
 function getWinningCombinations() {
     return [
-        [1, 2, 3], [4, 5, 6], [7, 8, 9],
-        [1, 4, 7], [2, 5, 8], [3, 6, 9],
-        [1, 5, 9], [3, 5, 7]
+        [1, 2, 3], [4, 5, 6], [7, 8, 9], // Horizontal row
+        [1, 4, 7], [2, 5, 8], [3, 6, 9], // Vertical row
+        [1, 5, 9], [3, 5, 7]             // Diagonals
     ];
 }
 
@@ -88,16 +88,14 @@ function checkWinner(playerName, playerMoves) {
     if (moves.length > 2) {
         for (const subArray of getWinningCombinations()) {
             if (subArray.every(num => moves.includes(num))) {
-                console.log(` -- ${name} WINS -- `);
                 isGameOver = true;
                 declarationText = ` -- ${name} WINS -- `;
-                break; // break out of the for-loop
+                break; // Stop the loop — no need to check further once a winner is found
             }
         }
     }
 
     if (!isGameOver && gameController.getCurrentRound() === 9) {
-        console.log(` -- It's a DRAW -- `);
         isGameOver = true;
         declarationText = ` -- It's a DRAW -- `;
     }
